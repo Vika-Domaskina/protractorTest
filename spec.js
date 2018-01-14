@@ -22,8 +22,9 @@ describe('Testing "booking.com"', () => {
 			return parseInt(dateOut) + 7;
 		})
 		.then((res) => {
-			//console.log("blabla first then : " + res);
+			// console.log("blabla first then : " + res);
 			calendarCheckIn.click();
+			console.log("Selected check-in date")
 			return res;
 		})
 		.then((res) => {
@@ -36,9 +37,11 @@ describe('Testing "booking.com"', () => {
 		})
 		.then((xpath) => {
 			element.all(by.xpath(xpath+'/parent::td')).first().click();
+			console.log("Selected check-out date");
 		});
 		let searchButton = element.all(by.className('sb-searchbox__button  ')).first().click()
 		.then(() => {
+			console.log("Seach deals!")
 			let searchResult = browser.wait(function() {
     			return element(by.className("destination-sr-header__col destination-sr-header__content")).isPresent();
     		}, 7000);
@@ -49,7 +52,16 @@ describe('Testing "booking.com"', () => {
 	});
 
 	it("Find 'New York' in results", (done) => {
-		
+		let resultUrl = element.all(by.className(' jq_tooltip   district_link visited_link  '));
+		resultUrl.getText()
+		.then((text) => {
+			// console.log(text);
+			console.log("Search 'New York' in results")
+			text.forEach((str) => {
+				expect(str.includes("New York")).toBeTruthy('Not correct result');
+
+			})
+		})
 		.then(done).catch(err => done.fail("Result not found" + err));
-	})
+	});
 })
